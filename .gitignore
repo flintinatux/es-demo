@@ -1,0 +1,7 @@
+*.log
+.DS_Store
+.env*
+.next
+.nyc_output
+node_modules
+nodejs
