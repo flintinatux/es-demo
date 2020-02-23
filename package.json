@@ -5,16 +5,14 @@
   "author": "flintinatux",
   "license": "UNLICENSED",
   "scripts": {
-    "db:install": "./node_modules/@eventide/message-db/database/install.sh",
-    "dev": "dotenv next",
-    "docs": "docsify serve ./docs/",
+    "dev": "next",
+    "docs": "docsify serve -p 4000 ./docs/",
     "lint": "eslint .",
     "start": "next start"
   },
   "dependencies": {
     "@articulate/funky": "^1.9.1",
     "@eventide/message-db": "^1.1.6",
-    "dotenv-cli": "^3.1.0",
     "highland": "^2.13.5",
     "next": "^9.2.2",
     "pg": "^7.18.2",

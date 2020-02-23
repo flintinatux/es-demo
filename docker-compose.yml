@@ -1,0 +1,22 @@
+version: '2.4'
+services:
+  app:
+    build:
+      args:
+        NPM_TOKEN: ${NPM_TOKEN}
+      context: .
+    command: yarn start
+    depends_on:
+      - postgres
+    env_file:
+      - .env.default
+    mem_reservation: "1024m"
+    ports:
+      - 3000
+
+  postgres:
+    image: ethangarofolo/message-db:1.1.6
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    expose:
+      - '5432'

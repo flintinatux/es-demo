@@ -1,4 +1,4 @@
-const p = require('react-puddles')
+import p from 'react-puddles'
 
 const Home = () =>
   p('div', null,
@@ -20,4 +20,4 @@ const recordView = () =>
     body: JSON.stringify({ videoId: '123' })
   })
 
-module.exports = Home
+export default Home
