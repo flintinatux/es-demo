@@ -1,12 +1,11 @@
-const { mapObj, thrush } = require('tinyfunk')
+const { mapObj, merge, thrush } = require('tinyfunk')
 
-const api = {
-  writeMessage: require('./writeMessage')
-}
+const api = require('./api')
 
+// messages :: Object -> Object
 const messages = opts => {
   const db = require('./db')(opts)
-  return mapObj(thrush({ db }), api)
+  return merge(mapObj(thrush(db), api), db)
 }
 
 module.exports = messages

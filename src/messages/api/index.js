@@ -1,0 +1,1 @@
+exports.Consumer = require('./Consumer')

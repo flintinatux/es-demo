@@ -1,32 +1,33 @@
 module.exports = {
-  "env": {
-    "browser": true,
-    "commonjs": true,
-    "es6": true,
-    "node": true
+  'env': {
+    'browser': true,
+    'commonjs': true,
+    'es6': true,
+    'node': true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended"
+  'extends': [
+    'eslint:recommended',
+    'plugin:react/recommended'
   ],
-  "globals": {
-    "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
+  'globals': {
+    'Atomics': 'readonly',
+    'SharedArrayBuffer': 'readonly'
   },
-  "parserOptions": {
-    "ecmaFeatures": {
-        "jsx": true
+  'parserOptions': {
+    'ecmaFeatures': {
+      'jsx': true
     },
-    "ecmaVersion": 2018
+    'ecmaVersion': 2018,
+    'sourceType': 'module'
   },
-  "plugins": [
-    "react"
+  'plugins': [
+    'react'
   ],
-  "rules": {
+  'rules': {
   },
-  "settings": {
-    "react": {
-      "version": "detect"
+  'settings': {
+    'react': {
+      'version': 'detect'
     }
   }
 }

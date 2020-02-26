@@ -1,9 +1,22 @@
 version: '2.4'
 services:
   app:
-    command: yarn dev
-    env_file:
-      - .env
+    # env_file:
+    #   - .env
+    environment:
+      - NPM_TOKEN=${NPM_TOKEN}
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./.npmrc:/service/.npmrc
+      - ./docs:/service/docs
+      - ./src:/service/src
+      - ./package.json:/service/package.json
+      - ./yarn.lock:/service/yarn.lock
+
+  aggregators:
+    # env_file:
+    #   - .env
     environment:
       - NPM_TOKEN=${NPM_TOKEN}
     volumes:

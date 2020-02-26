@@ -5,14 +5,39 @@ services:
       args:
         NPM_TOKEN: ${NPM_TOKEN}
       context: .
-    command: yarn start
+    command: yarn dev
     depends_on:
       - postgres
     env_file:
       - .env.default
-    mem_reservation: "1024m"
+    mem_reservation: "512m"
     ports:
       - 3000
+
+  aggregators:
+    image: es_app
+    command: yarn dev:aggregators
+    depends_on:
+      - postgres
+    env_file:
+      - .env.default
+    mem_reservation: "256m"
+
+  mongo:
+    image: mongo
+    restart: always
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    # environment:
+    #   ME_CONFIG_MONGODB_ADMINUSERNAME: root
+    #   ME_CONFIG_MONGODB_ADMINPASSWORD: example
 
   postgres:
     image: ethangarofolo/message-db:1.1.6

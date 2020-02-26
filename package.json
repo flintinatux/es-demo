@@ -6,14 +6,18 @@
   "license": "UNLICENSED",
   "scripts": {
     "dev": "next",
+    "dev:aggregators": "nodemon -w src src/aggregators/index.js",
     "docs": "docsify serve -p 4000 ./docs/",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start",
+    "start:aggregators": "node src/aggregators/index.js"
   },
   "dependencies": {
     "@articulate/funky": "^1.9.1",
     "@eventide/message-db": "^1.1.6",
     "highland": "^2.13.5",
+    "lodash.memoize": "^4.1.2",
+    "mongodb": "^3.5.3",
     "next": "^9.2.2",
     "pg": "^7.18.2",
     "pg-query-stream": "^3.0.3",
@@ -25,6 +29,7 @@
   },
   "devDependencies": {
     "eslint": "^6.8.0",
-    "eslint-plugin-react": "^7.18.3"
+    "eslint-plugin-react": "^7.18.3",
+    "nodemon": "^2.0.2"
   }
 }
