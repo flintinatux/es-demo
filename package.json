@@ -15,6 +15,7 @@
   "dependencies": {
     "@articulate/funky": "^1.9.1",
     "@eventide/message-db": "^1.1.6",
+    "axios": "^0.19.2",
     "highland": "^2.13.5",
     "lodash.memoize": "^4.1.2",
     "mongodb": "^3.5.3",

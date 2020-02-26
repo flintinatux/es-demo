@@ -8,6 +8,8 @@ None yet.
 
 ## Events
 
+Stream name: `viewing-${videoId}`
+
 ### VideoViewed
 
 Marks a video as having been viewed at a particular time by a user.
