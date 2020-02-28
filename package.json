@@ -15,7 +15,9 @@
   "dependencies": {
     "@articulate/funky": "^1.9.1",
     "@eventide/message-db": "^1.1.6",
+    "@hapi/joi": "^17.1.0",
     "axios": "^0.19.2",
+    "bcrypt": "^4.0.0",
     "highland": "^2.13.5",
     "lodash.memoize": "^4.1.2",
     "mongodb": "^3.5.3",
@@ -26,6 +28,7 @@
     "react-dom": "^16.12.0",
     "react-puddles": "^0.2.1",
     "tinyfunk": "^1.7.2",
+    "tinygen": "^0.2.0",
     "uuid": "^3.4.0"
   },
   "devDependencies": {

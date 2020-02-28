@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Link from 'next/link'
 import p from 'react-puddles'
 import { pipeP, prop } from 'tinyfunk'
 
@@ -11,7 +12,21 @@ const Home = ({ videosWatched }) =>
     ),
 
     p('main', null,
-      p('p', null, `Total views: ${videosWatched}`)
+      p('p', null, `Total views: ${videosWatched}`),
+      p('p', null,
+        p(Link, { href: '/videos/[videoId]', as: '/videos/1234' },
+          p('a', null, 'Click to watch video 1234')
+        )
+      ),
+      p('p', null,
+        p(Link, { href: '/register' },
+          p('a', null, 'Register')
+        ),
+        ' ',
+        p(Link, { href: '/login' },
+          p('a', null, 'Login')
+        )
+      )
     )
   )
 
