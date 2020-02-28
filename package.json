@@ -7,10 +7,12 @@
   "scripts": {
     "dev": "next",
     "dev:aggregators": "nodemon -w src src/aggregators/index.js",
+    "dev:components": "nodemon -w src src/components/index.js",
     "docs": "docsify serve -p 4000 ./docs/",
     "lint": "eslint .",
     "start": "next start",
-    "start:aggregators": "node src/aggregators/index.js"
+    "start:aggregators": "node src/aggregators/index.js",
+    "start:components": "node src/components/index.js"
   },
   "dependencies": {
     "@articulate/funky": "^1.9.1",
@@ -27,6 +29,7 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-puddles": "^0.2.1",
+    "require-dir": "^1.2.0",
     "tinyfunk": "^1.7.2",
     "tinygen": "^0.2.0",
     "uuid": "^3.4.0"

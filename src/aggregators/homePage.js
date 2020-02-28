@@ -1,7 +1,5 @@
 const { Consumer } = require('../lib/messages')
 const mongodb = require('../lib/mongodb')
-const { VideoViewed } = require('../lib/types')
-const { viewing } = require('../lib/categories')
 
 const init = {
   lastViewProcessed: 0,
@@ -24,13 +22,12 @@ const incrementVideosWatched = async ({ globalPosition }) =>
         $set: { lastViewProcessed: globalPosition } }
     )
 
-const handlers = {
-  [ VideoViewed ]: incrementVideosWatched
-}
-
-module.exports = Consumer({
-  category: viewing,
-  consumerId: 'aggregators:homePage',
-  handlers,
-  init: ensureHomePage
-})
+module.exports =
+  Consumer({
+    name: 'aggregators:HomePage',
+    category: 'viewing',
+    init: ensureHomePage,
+    handlers: {
+      VideoViewed: incrementVideosWatched
+    }
+  })

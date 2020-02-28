@@ -1,7 +1,5 @@
 const trace = require('../../lib/trace')
 
-const { VideoViewed } = require('../../lib/types')
-const { viewing } = require('../../lib/categories')
 const { writeMessage } = require('../../lib/messages')
 
 const recordView = async (req, res) => {
@@ -11,7 +9,7 @@ const recordView = async (req, res) => {
   } = req
 
   const msg = {
-    type: VideoViewed,
+    type: 'VideoViewed',
     metadata: { traceId, userId },
     data: {
       videoId,
@@ -19,7 +17,7 @@ const recordView = async (req, res) => {
     }
   }
 
-  await writeMessage(`${viewing}-${videoId}`, msg)
+  await writeMessage(`viewing-${videoId}`, msg)
 
   res.status(202)
   res.end()

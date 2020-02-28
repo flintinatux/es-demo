@@ -18,9 +18,8 @@ const schema = Joi.object({
 const buildCommand =
   assemble({
     type: 'Register',
-    meta: pick(['traceId', 'userId']),
-    data: pick(['email', 'password', 'userId']),
-    expectedVersion: 0
+    metadata: pick(['traceId', 'userId']),
+    data: pick(['email', 'password', 'userId'])
   })
 
 const ensureNotExisting = tapP(({ existing }) =>

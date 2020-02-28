@@ -23,6 +23,15 @@ services:
       - .env.default
     mem_reservation: "256m"
 
+  components:
+    image: es_app
+    command: yarn dev:components
+    depends_on:
+      - postgres
+    env_file:
+      - .env.default
+    mem_reservation: "256m"
+
   mongo:
     image: mongo
     restart: always

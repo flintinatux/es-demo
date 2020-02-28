@@ -6,12 +6,12 @@ const Consumer = db => opts => {
   const {
     batchSize = 1000,
     category,
-    consumerId,
     handlers = {},
     groupMember,
     groupSize,
     init = Function.prototype,
     logger = console.log,
+    name,
     positionUpdateInterval = 100,
     tickInterval = 100
   } = opts
@@ -19,7 +19,7 @@ const Consumer = db => opts => {
   let count = 0
   let position = 0
   const suffix = groupMember ? `-${groupMember}:${groupSize}` : ''
-  const streamName = `consumerPosition-${consumerId}${suffix}`
+  const streamName = `consumerPosition-${name}${suffix}`
   let up = false
 
   const pollOpts = { batchSize, category, groupMember, groupSize }
@@ -48,7 +48,7 @@ const Consumer = db => opts => {
   }
 
   const start = async () => {
-    console.log(`Starting ${consumerId}`)
+    console.log(`Starting ${name}`)
     up = true
     await init()
     await loadPosition()
@@ -57,7 +57,7 @@ const Consumer = db => opts => {
 
   const stop = err => {
     if (err) console.error(err)
-    console.log(`Stopping ${consumerId}`)
+    console.log(`Stopping ${name}`)
     up = false
   }
 
