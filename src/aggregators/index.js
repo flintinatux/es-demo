@@ -1,5 +1,6 @@
 const aggregators = [
-  require('./HomePage')
+  require('./HomePage'),
+  require('./UserCreds')
 ]
 
 if (require.main === module)
