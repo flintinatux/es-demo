@@ -1,4 +1,4 @@
-# recordViewing
+# RecordViewing
 
 > Tracks when videos are viewed.
 

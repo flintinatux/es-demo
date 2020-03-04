@@ -7,6 +7,7 @@ services:
       context: .
     command: yarn dev
     depends_on:
+      - mongo
       - postgres
     env_file:
       - .env.default
@@ -18,6 +19,7 @@ services:
     image: es_app
     command: yarn dev:aggregators
     depends_on:
+      - mongo
       - postgres
     env_file:
       - .env.default
@@ -27,6 +29,7 @@ services:
     image: es_app
     command: yarn dev:components
     depends_on:
+      - mongo
       - postgres
     env_file:
       - .env.default

@@ -1,4 +1,4 @@
-# identity
+# Identity
 
 > Handles everything related to identifying users.
 

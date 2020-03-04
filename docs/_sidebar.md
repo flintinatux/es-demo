@@ -1,6 +1,7 @@
 * [Home](/)
 
 * Apps
-  * [`recordViewing`](apps/recordViewing.md)
+  * [`Authentication`](apps/Authentication.md)
+  * [`RecordViewing`](apps/RecordViewing.md)
 * Components
-  * [`identity`](components/identity.md)
+  * [`Identity`](components/Identity.md)

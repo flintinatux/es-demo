@@ -917,12 +917,19 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
+"@hapi/boom@^9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@hapi/boom/-/boom-9.0.0.tgz#28f9e77ecf2dea1fe3a8982b9d8827aa5137e33a"
+  integrity sha512-D+Or4yahLq3L7D1Jf0fR1+Lgr+HPK1lej8tc6hS/fBLmK66XdpvTyKv8YUR5ls1GeQy+KGtbpKAs+ZxyzNtUyA==
+  dependencies:
+    "@hapi/hoek" "9.x.x"
+
 "@hapi/formula@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@hapi/formula/-/formula-2.0.0.tgz#edade0619ed58c8e4f164f233cda70211e787128"
   integrity sha512-V87P8fv7PI0LH7LiVi8Lkf3x+KCO7pQozXRssAHNXXL9L1K+uyu4XypLXwxqVDKgyQai6qj3/KteNlrqDx4W5A==
 
-"@hapi/hoek@^9.0.0":
+"@hapi/hoek@9.x.x", "@hapi/hoek@^9.0.0":
   version "9.0.3"
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.0.3.tgz#e49e637d5de8faa4f0d313c2590b455d7c00afd7"
   integrity sha512-jKtjLLDiH95b002sJVc5c74PE6KKYftuyVdVmsuYId5stTaWcRFqE+5ukZI4gDUKjGn8wv2C3zPn3/nyjEI7gg==
@@ -4004,7 +4011,7 @@ json5@^1.0.1:
   dependencies:
     minimist "^1.2.0"
 
-jsonwebtoken@8.5.1:
+jsonwebtoken@8.5.1, jsonwebtoken@^8.5.1:
   version "8.5.1"
   resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.5.1.tgz#00e71e0b8df54c2121a1f26137df2280673bcc0d"
   integrity sha512-XjwVfRS6jTMsqYs0EsuJ4LGxXV14zQybNd4L2r0UvbVnSF9Af8x7p5MzbJ90Ioz/9TI41/hTCvznF/loiSzn8w==
@@ -4473,6 +4480,13 @@ mkdirp@0.5.1, mkdirp@^0.5.0, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
+mnemonist@^0.32.0:
+  version "0.32.0"
+  resolved "https://registry.yarnpkg.com/mnemonist/-/mnemonist-0.32.0.tgz#2c6d1dd12cb69ca2ed79a636ba9ffe5a6e9f2573"
+  integrity sha512-WMVGPpT8guWwnsnw+WibOvInBnPfXFG+9SD+mg2+YgPEuW9Gdz9D2MEi05ko6RG1ui0RHljc+yYAvOHQn3GbbQ==
+  dependencies:
+    obliterator "^1.5.0"
+
 mongodb@^3.5.3:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.5.3.tgz#f2c7ce9b5fc9a13da116ff1b6e816f6256010a86"
@@ -4937,6 +4951,11 @@ object.values@^1.1.1:
     es-abstract "^1.17.0-next.1"
     function-bind "^1.1.1"
     has "^1.0.3"
+
+obliterator@^1.5.0:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/obliterator/-/obliterator-1.6.1.tgz#dea03e8ab821f6c4d96a299e17aef6a3af994ef3"
+  integrity sha512-9WXswnqINnnhOG/5SLimUlzuU1hFJUc8zkwyD59Sd+dPOMf05PmnYG/d6Q7HZ+KmgkZJa1PxRso6QdM3sTNHig==
 
 on-finished@~2.3.0:
   version "2.3.0"
@@ -5886,6 +5905,11 @@ ramda@^0.25.0:
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
   integrity sha512-GXpfrYVPwx3K7RQ6aYT8KPS8XViSXUVJT1ONhoKPE9VAleW42YE+U+8VEyGWt41EnEQW7gwecYJriTI0pKoecQ==
+
+ramda@^0.27.0:
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.27.0.tgz#915dc29865c0800bf3f69b8fd6c279898b59de43"
+  integrity sha512-pVzZdDpWwWqEVVLshWUHjNwuVP7SfcmPraYuqocJp1yo2U1R7P+5QAfDhdItkuoGqIBnBYrtPp7rEPqDn9HlZA==
 
 randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5:
   version "2.1.0"

@@ -14,7 +14,8 @@ const Registered = (entity, event) =>
 
 const fetchIdentity =
   fetchEntity({
-    name: 'components:Identity:fetchIdentity',
+    name: 'Identity',
+    category: 'identity',
     init: {
       email: null,
       locked: false,

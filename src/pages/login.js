@@ -1,12 +1,11 @@
 import axios from 'axios'
 import { compose } from 'tinyfunk'
 import p from 'react-puddles'
-import tinygen from 'tinygen'
 import { useCallback, useState } from 'react'
 
 import { targetVal } from '../lib/events'
 
-const Register = ({ userId }) => {
+const Login = () => {
   const [ email, setEmail ] = useState('')
   const [ error, setError ] = useState('')
   const [ password, setPassword ] = useState('')
@@ -14,12 +13,12 @@ const Register = ({ userId }) => {
   const submit = useCallback(event => {
     event.preventDefault()
     setError('')
-    registerUser(setError, { email, password, userId })
-  }, [ email, password, userId ])
+    loginUser(setError, { email, password })
+  }, [ email, password ])
 
   return p('div', null,
     p('header', null,
-      p('h1', null, 'Register New User')
+      p('h1', null, 'Login')
     ),
 
     p('main', null,
@@ -49,16 +48,13 @@ const Register = ({ userId }) => {
   )
 }
 
-const registerUser = (setError, data) =>
+const loginUser = (setError, data) =>
   axios({
     method: 'POST',
-    url: '/api/register',
+    url: '/api/login',
     data
-  }).catch(err =>
-    setError(err.response.data.details[0].message)
+  }).catch(() =>
+    setError('Oops!  An error occured logging you in.  Please try again later.')
   )
 
-Register.getInitialProps = () =>
-  ({ userId: tinygen() })
-
-export default Register
+export default Login
