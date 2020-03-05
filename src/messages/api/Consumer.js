@@ -19,7 +19,7 @@ const Consumer = db => opts => {
   let count = 0
   let position = 0
   const suffix = groupMember ? `-${groupMember}:${groupSize}` : ''
-  const streamName = `consumerPosition-${name}${suffix}`
+  const streamName = `${category}+position-${name}${suffix}`
   let up = false
 
   const pollOpts = { batchSize, category, groupMember, groupSize }
@@ -79,7 +79,7 @@ const Consumer = db => opts => {
 
   const writePosition = () =>
     _(db.writeMessage(streamName, {
-      type: 'MessageRead',
+      type: 'Recorded',
       data: { position }
     }))
 

@@ -1,7 +1,23 @@
 const { copyProp } = require('@articulate/funky')
-const { dissoc, identity, pipe, prop, when } = require('tinyfunk')
-const LRUCache = require('mnemonist/lru-cache')
 const mergeDeepRight = require('ramda/src/mergeDeepRight')
+
+const {
+  compose, identity, merge, omit, pipe, prop, when
+} = require('tinyfunk')
+
+// See https://github.com/dominictarr/bench-lru for benchmark comparison
+// of available LRU cache implementations.  Mnemonist implements a doubly
+// linked list that far outperforms the rest.
+const LRUCache = require('mnemonist/lru-cache')
+
+const emptyRecord = {
+  entity: null,
+  id: null,
+  snapshotTime: null,
+  snapshotVersion: -1,
+  time: null,
+  version: -1
+}
 
 const applyDefaults =
   mergeDeepRight({
@@ -9,30 +25,40 @@ const applyDefaults =
       enabled: true,
       limit: 1000
     },
-    projection: {
-      handlers: {}
-    },
     snapshot: {
       enabled: true,
       interval: 100
     }
   })
 
-// fetchEntity :: Object -> String -> Promise a
-const fetchEntity = db => opts => {
+const cleanSnapshot =
+  omit(['snapshotTime', 'snapshotVersion'])
+
+const copySnapshotMeta =
+  pipe(
+    copyProp('time', 'snapshotTime'),
+    copyProp('version', 'snapshotVersion')
+  )
+
+const parseSnapshot =
+  when(Boolean, compose(copySnapshotMeta, prop('data')))
+
+// Entity :: Object -> String -> Promise [ a, Number ]
+const Entity = db => opts => {
   const {
     cache,
     category,
+    handlers = {},
+    init,
     name,
-    projection: { init, handlers },
     snapshot
   } = applyDefaults(opts)
 
   if (!category)
-    throw new Error('Each projection must specify a category')
+    throw new Error('Each entity must specify a category')
 
   if (!name)
-    throw new Error('Each projection must have a unique name')
+    throw new Error('Each entity must have a unique name')
 
   const _cache = new LRUCache(cache.limit)
 
@@ -46,11 +72,7 @@ const fetchEntity = db => opts => {
       record = await getSnapshot(id)
 
     if (record === undefined)
-      record = {
-        entity: init,
-        lastSnapshot: 0,
-        version: 0
-      }
+      record = merge(emptyRecord, { entity: init, id })
 
     record = await db.getStreamMessages({
       streamName: `${category}-${id}`,
@@ -60,16 +82,16 @@ const fetchEntity = db => opts => {
 
     if (
       snapshot.enabled &&
-      (record.version - record.lastSnapshot) >= snapshot.interval
+      (record.version - record.snapshotVersion) >= snapshot.interval
     ) {
-      record.lastSnapshot = record.version
+      record = copySnapshotMeta(record)
       await putSnapshot(id, record)
     }
 
     if (cache.enabled)
       _cache.set(id, record)
 
-    return record.entity
+    return [ record.entity, record.version ]
   }
 
   const getSnapshot = id =>
@@ -78,26 +100,21 @@ const fetchEntity = db => opts => {
 
   const handle = (record, event) => {
     const handler = handlers[event.type] || identity
-    return {
+
+    return merge(record, {
       entity: handler(record.entity, event),
-      lastSnapshot: record.lastSnapshot,
+      time: new Date().toJSON(),
       version: event.position
-    }
+    })
   }
 
   const putSnapshot = (id, record) =>
     db.writeMessage(`${name}:snapshot-${id}`, {
       type: 'Recorded',
-      data: dissoc('lastSnapshot', record)
+      data: cleanSnapshot(record)
     })
 
-  return fetch
+  return { fetch }
 }
 
-const parseSnapshot =
-  when(Boolean, pipe(
-    prop('data'),
-    copyProp('version', 'lastSnapshot')
-  ))
-
-module.exports = fetchEntity
+module.exports = Entity

@@ -1,6 +1,13 @@
 const { assoc, merge } = require('tinyfunk')
 
-const { fetchEntity } = require('../../../lib/messages')
+const { Entity } = require('../../../lib/messages')
+
+const init = {
+  email: null,
+  locked: false,
+  registered: false,
+  userId: null
+}
 
 const AccountLocked =
   assoc('locked', true)
@@ -12,20 +19,15 @@ const Registered = (entity, event) =>
     userId: event.data.userId
   })
 
-const fetchIdentity =
-  fetchEntity({
+const Identity =
+  Entity({
     name: 'Identity',
     category: 'identity',
-    init: {
-      email: null,
-      locked: false,
-      registered: false,
-      userId: null
-    },
+    init,
     handlers: {
       AccountLocked,
       Registered
     }
   })
 
-module.exports = fetchIdentity
+module.exports = Identity

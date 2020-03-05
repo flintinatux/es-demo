@@ -1,37 +1,21 @@
-const { assocWithP } = require('@articulate/funky')
-const { compose, objOf, path, pipeP, prop, unless } = require('tinyfunk')
+const { pick } = require('tinyfunk')
 
-const fetchIdentity = require('../lib/fetchIdentity')
+const Identity = require('../lib/Identity')
+const retryOnConflict = require('../../../lib/retryOnConflict')
 const { writeMessage } = require('../../../lib/messages')
 
-const alreadyRegistered =
-  path(['identity', 'registered'])
+const Register = async ({ data, metadata }) => {
+  const [ identity, version ] = await Identity.fetch(data.userId)
 
-const streamName = command =>
-  `identity-${command.data.userId}`
+  if (!identity.registered) {
+    writeMessage(`identity-${data.userId}`, {
+      type: 'Registered',
+      metadata: pick(['traceId', 'userId'], metadata),
+      data: pick(['email', 'password', 'userId'], data),
+      expectedVersion: version
+    })
+  }
+}
 
-const getIdentity =
-  compose(fetchIdentity, streamName, prop('command'))
-
-const writeRegistered = ({ command }) =>
-  writeMessage(streamName(command), {
-    type: 'Registered',
-    metadata: {
-      traceId: command.metadata.traceId,
-      userId: command.metadata.userId
-    },
-    data: {
-      email: command.data.email,
-      password: command.data.password,
-      userId: command.data.userId
-    }
-  })
-
-const Register =
-  pipeP(
-    objOf('command'),
-    assocWithP('identity', getIdentity),
-    unless(alreadyRegistered, writeRegistered)
-  )
-
-module.exports = Register
+module.exports =
+  retryOnConflict(Register)

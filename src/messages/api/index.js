@@ -1,2 +1,2 @@
 exports.Consumer = require('./Consumer')
-exports.fetchEntity = require('./fetchEntity')
+exports.Entity = require('./Entity')
