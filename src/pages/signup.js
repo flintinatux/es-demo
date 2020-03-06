@@ -1,12 +1,12 @@
 import axios from 'axios'
-import { compose } from 'tinyfunk'
+import { compose, either, path, prop } from 'tinyfunk'
 import p from 'react-puddles'
 import tinygen from 'tinygen'
 import { useCallback, useState } from 'react'
 
 import { targetVal } from '../lib/events'
 
-const Register = ({ userId }) => {
+const SignupFom = ({ userId }) => {
   const [ email, setEmail ] = useState('')
   const [ error, setError ] = useState('')
   const [ password, setPassword ] = useState('')
@@ -14,12 +14,12 @@ const Register = ({ userId }) => {
   const submit = useCallback(event => {
     event.preventDefault()
     setError('')
-    registerUser(setError, { email, password, userId })
+    signup(setError, { email, password, userId })
   }, [ email, password, userId ])
 
   return p('div', null,
     p('header', null,
-      p('h1', null, 'Register New User')
+      p('h1', null, 'Signup New User')
     ),
 
     p('main', null,
@@ -49,16 +49,19 @@ const Register = ({ userId }) => {
   )
 }
 
-const registerUser = (setError, data) =>
+const signup = (setError, data) =>
   axios({
     method: 'POST',
-    url: '/api/register',
+    url: '/api/signup',
     data
   }).catch(err =>
-    setError(err.response.data.details[0].message)
+    setError(either(
+      path(['response', 'data', 'details', '0', 'message']),
+      compose(JSON.stringify, path(['response', 'data', 'errors']))
+    )(err))
   )
 
-Register.getInitialProps = () =>
+SignupFom.getInitialProps = () =>
   ({ userId: tinygen() })
 
-export default Register
+export default SignupFom

@@ -1,5 +1,5 @@
 const components = [
-  require('./Identity')
+  require('./UserSignup')
 ]
 
 if (require.main === module)

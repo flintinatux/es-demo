@@ -102,7 +102,7 @@ const Entity = db => opts => {
 
     if (_cache) {
       _cache.set(id, record)
-      debug('cache updated: %o', { id, version: record.version })
+      debug('cache: %o', { id, version: record.version })
     }
 
     return [ record.entity, record.version ]

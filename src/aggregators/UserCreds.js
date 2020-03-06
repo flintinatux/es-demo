@@ -15,8 +15,8 @@ const createUserCred = async event => {
 module.exports =
   Consumer({
     name: 'UserCreds',
-    category: 'identity',
+    category: 'userSignup',
     handlers: {
-      Registered: createUserCred
+      SignedUp: createUserCred
     }
   })

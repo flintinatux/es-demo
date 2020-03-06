@@ -5,29 +5,29 @@ const { Entity } = require('../../../lib/messages')
 const init = {
   email: null,
   locked: false,
-  registered: false,
+  signedUp: false,
   userId: null
 }
 
-const AccountLocked =
+const Locked =
   assoc('locked', true)
 
-const Registered = (entity, event) =>
+const SignedUp = (entity, event) =>
   merge(entity, {
     email: event.data.email,
-    registered: true,
+    signedUp: true,
     userId: event.data.userId
   })
 
-const Identity =
+const UserSignup =
   Entity({
-    name: 'Identity',
-    category: 'identity',
+    name: 'UserSignup',
+    category: 'userSignup',
     init,
     handlers: {
-      AccountLocked,
-      Registered
+      Locked,
+      SignedUp
     }
   })
 
-module.exports = Identity
+module.exports = UserSignup

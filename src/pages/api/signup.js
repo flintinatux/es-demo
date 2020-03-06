@@ -17,7 +17,7 @@ const schema = Joi.object({
 
 const buildCommand =
   assemble({
-    type: 'Register',
+    type: 'Signup',
     metadata: pick(['traceId', 'userId']),
     data: pick(['email', 'password', 'userId'])
   })
@@ -32,15 +32,15 @@ const existingIdentity = async ({ email }) =>
 const hashPassword = password =>
   bcrypt.hash(password, 10)
 
-const register = async (req, res) =>
+const signup = async (req, res) =>
   schema.validateAsync(req.body)
     .then(assoc('traceId', req.meta.traceId))
     .then(assocWithP('existing', existingIdentity))
     .then(ensureNotExisting)
     .then(evolveP({ password: hashPassword }))
     .then(buildCommand)
-    .then(writeMessage(`identity:command-${req.body.userId}`))
+    .then(writeMessage(`userSignup:command-${req.body.userId}`))
     .then(accepted(res))
     .catch(error(res))
 
-module.exports = trace(register)
+module.exports = trace(signup)
