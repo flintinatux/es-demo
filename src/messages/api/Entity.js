@@ -2,7 +2,7 @@ const { copyProp } = require('@articulate/funky')
 const mergeDeepRight = require('ramda/src/mergeDeepRight')
 
 const {
-  compose, identity, merge, omit, pipe, prop, when
+  compose, dissoc, identity, merge, prop, when
 } = require('tinyfunk')
 
 // See https://github.com/dominictarr/bench-lru for benchmark comparison
@@ -13,7 +13,6 @@ const LRUCache = require('mnemonist/lru-cache')
 const emptyRecord = {
   entity: null,
   id: null,
-  snapshotTime: null,
   snapshotVersion: -1,
   time: null,
   version: -1
@@ -32,16 +31,13 @@ const applyDefaults =
   })
 
 const cleanSnapshot =
-  omit(['snapshotTime', 'snapshotVersion'])
+  dissoc('snapshotVersion')
 
-const copySnapshotMeta =
-  pipe(
-    copyProp('time', 'snapshotTime'),
-    copyProp('version', 'snapshotVersion')
-  )
+const copySnapshotVersion =
+  copyProp('version', 'snapshotVersion')
 
 const parseSnapshot =
-  when(Boolean, compose(copySnapshotMeta, prop('data')))
+  when(Boolean, compose(copySnapshotVersion, prop('data')))
 
 // Entity :: Object -> String -> Promise [ a, Number ]
 const Entity = db => opts => {
@@ -60,18 +56,31 @@ const Entity = db => opts => {
   if (!name)
     throw new Error('Each entity must have a unique name')
 
-  const _cache = new LRUCache(cache.limit)
+  const debug =
+    require('../lib/debug').extend(`entity-${name}`)
+
+  debug('cache enabled: %o', cache.enabled)
+  debug('snapshot enabled: %o', snapshot.enabled)
+
+  const _cache = cache.enabled && new LRUCache(cache.limit)
 
   const fetch = async id => {
+    debug('fetching: %o', id)
     let record
 
-    if (cache.enabled)
+    if (_cache) {
       record = _cache.get(id)
+      if (record) debug('cache hit: %o', record)
+      else debug('cache miss: %o', id)
+    }
 
-    if (snapshot.enable && record === undefined)
+    if (snapshot.enabled && !record) {
       record = await getSnapshot(id)
+      if (record) debug('snapshot loaded: %o', record)
+      else debug('snapshot not found: %o', id)
+    }
 
-    if (record === undefined)
+    if (!record)
       record = merge(emptyRecord, { entity: init, id })
 
     record = await db.getStreamMessages({
@@ -80,16 +89,21 @@ const Entity = db => opts => {
     }).reduce(record, handle)
       .toPromise(Promise)
 
+    debug('fetched: %o', cleanSnapshot(record))
+
     if (
       snapshot.enabled &&
       (record.version - record.snapshotVersion) >= snapshot.interval
     ) {
-      record = copySnapshotMeta(record)
+      record = copySnapshotVersion(record)
       await putSnapshot(id, record)
+      debug('snapshot recorded: %o', { id, version: record.version })
     }
 
-    if (cache.enabled)
+    if (_cache) {
       _cache.set(id, record)
+      debug('cache updated: %o', { id, version: record.version })
+    }
 
     return [ record.entity, record.version ]
   }

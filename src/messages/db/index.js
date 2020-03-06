@@ -4,6 +4,8 @@ const { once } = require('ramda')
 const { Pool } = require('pg')
 const QueryStream = require('pg-query-stream')
 
+const debug = require('../lib/debug').extend('db')
+
 const db = {
   getCategoryMessages: require('./getCategoryMessages'),
   getLastStreamMessage: require('./getLastStreamMessage'),
@@ -19,10 +21,11 @@ const setPath = client =>
 // - https://node-postgres.com/api/pool
 const dbFactory = opts => {
   const pool = new Pool(opts)
+  debug('pool created, max connections: %o', pool.options.max)
   pool.on('error', console.error)
 
   const cleanup = once(signal => {
-    console.log(`Received ${signal}, draining pool`)
+    debug(`received ${signal}, draining pool`)
     pool.end(when(Boolean, console.error))
   })
 

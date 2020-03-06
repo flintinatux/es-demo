@@ -10,8 +10,7 @@ const Consumer = db => opts => {
     handlers = {},
     groupMember,
     groupSize,
-    init = Function.prototype,
-    logger = console.log,
+    init,
     name,
     positionUpdateInterval = 100,
     tickInterval = 100
@@ -25,12 +24,15 @@ const Consumer = db => opts => {
 
   const pollOpts = { batchSize, category, groupMember, groupSize }
 
+  const debug =
+    require('../lib/debug').extend(`consumer-${name}${suffix}`)
+
   const assignPosition = msg => {
     position = msg ? msg.data.position : 0
   }
 
   const cleanup = once(signal => {
-    console.log(`Received ${signal}, stopping consumer: ${name}`)
+    debug(`received ${signal}, stopping`)
     up = false
   })
 
@@ -42,10 +44,13 @@ const Consumer = db => opts => {
   const loadPosition = () =>
     db.getLastStreamMessage(streamName).then(assignPosition)
 
+  const logMessage = msg =>
+    debug('dispatching message: %o', msg)
+
   const poll = () => {
     const stream = db.getCategoryMessages(merge(pollOpts, { position }))
 
-    if (typeof logger ==='function') stream.observe().each(logger)
+    stream.observe().each(logMessage)
 
     stream.flatMap(handleMessage)
       .stopOnError(stop)
@@ -54,16 +59,24 @@ const Consumer = db => opts => {
   }
 
   const start = async () => {
-    console.log(`Starting consumer - ${name}`)
-    up = true
-    await init()
+    debug('starting on category: %o', category)
+    debug('handling types: %o', Object.keys(handlers))
+
+    if (typeof init === 'function') {
+      await init()
+      debug('initialized')
+    }
+
     await loadPosition()
+    debug('position loaded: %o', position)
+
+    up = true
     poll()
   }
 
   const stop = err => {
     if (err) console.error(err)
-    console.log(`Stopping consumer - ${name}`)
+    debug(`stopping${err ? ' on error' : ''}`)
     up = false
   }
 
@@ -77,6 +90,7 @@ const Consumer = db => opts => {
 
     if (count >= positionUpdateInterval) {
       count = 0
+      debug('position updated: %o', position)
       return writePosition()
     } else {
       return _.of()

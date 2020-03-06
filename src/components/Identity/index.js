@@ -3,7 +3,7 @@ const handlers = require('./handlers')
 
 module.exports =
   Consumer({
-    name: 'components:Identity',
+    name: 'Identity',
     category: 'identity:command',
     handlers
   })

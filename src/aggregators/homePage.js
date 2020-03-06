@@ -24,7 +24,7 @@ const incrementVideosWatched = async ({ globalPosition }) =>
 
 module.exports =
   Consumer({
-    name: 'aggregators:HomePage',
+    name: 'HomePage',
     category: 'viewing',
     init: ensureHomePage,
     handlers: {
