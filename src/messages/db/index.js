@@ -1,5 +1,6 @@
 const _ = require('highland')
-const { mapObj, thrush } = require('tinyfunk')
+const { mapObj, thrush, when } = require('tinyfunk')
+const { once } = require('ramda')
 const { Pool } = require('pg')
 const QueryStream = require('pg-query-stream')
 
@@ -18,6 +19,12 @@ const setPath = client =>
 // - https://node-postgres.com/api/pool
 const dbFactory = opts => {
   const pool = new Pool(opts)
+  pool.on('error', console.error)
+
+  const cleanup = once(signal => {
+    console.log(`Received ${signal}, draining pool`)
+    pool.end(when(Boolean, console.error))
+  })
 
   // query :: (String, [a]) -> Promise b
   const query = async (sql, vals=[]) => {
@@ -38,6 +45,10 @@ const dbFactory = opts => {
         return _(stream)
       })()
     ).flatten()
+
+  process.once('SIGHUP', cleanup)
+  process.once('SIGINT', cleanup)
+  process.once('SIGTERM', cleanup)
 
   return mapObj(thrush({ query, queryS }), db)
 }

@@ -1,5 +1,6 @@
 const _ = require('highland')
 const { merge } = require('tinyfunk')
+const { once } = require('ramda')
 const { tapP } = require('@articulate/funky')
 
 const Consumer = db => opts => {
@@ -28,6 +29,11 @@ const Consumer = db => opts => {
     position = msg ? msg.data.position : 0
   }
 
+  const cleanup = once(signal => {
+    console.log(`Received ${signal}, stopping consumer: ${name}`)
+    up = false
+  })
+
   const handleMessage = msg =>
     typeof handlers[msg.type] === 'function'
       ? _(tapP(handlers[msg.type])(msg))
@@ -48,7 +54,7 @@ const Consumer = db => opts => {
   }
 
   const start = async () => {
-    console.log(`Starting ${name}`)
+    console.log(`Starting consumer - ${name}`)
     up = true
     await init()
     await loadPosition()
@@ -57,7 +63,7 @@ const Consumer = db => opts => {
 
   const stop = err => {
     if (err) console.error(err)
-    console.log(`Stopping ${name}`)
+    console.log(`Stopping consumer - ${name}`)
     up = false
   }
 
@@ -82,6 +88,10 @@ const Consumer = db => opts => {
       type: 'Recorded',
       data: { position }
     }))
+
+  process.once('SIGHUP', cleanup)
+  process.once('SIGINT', cleanup)
+  process.once('SIGTERM', cleanup)
 
   return { handlers, start, stop }
 }
