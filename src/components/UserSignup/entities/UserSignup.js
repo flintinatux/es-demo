@@ -1,4 +1,4 @@
-const { assoc, merge } = require('tinyfunk')
+const { merge } = require('tinyfunk')
 
 const { Entity } = require('../../../lib/messages')
 
@@ -8,9 +8,6 @@ const init = {
   signedUp: false,
   userId: null
 }
-
-const Locked =
-  assoc('locked', true)
 
 const SignedUp = (entity, event) =>
   merge(entity, {
@@ -25,7 +22,6 @@ const UserSignup =
     category: 'userSignup',
     init,
     handlers: {
-      Locked,
       SignedUp
     }
   })

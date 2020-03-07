@@ -1,5 +1,5 @@
-const { assoc, pick } = require('tinyfunk')
-const { assemble, assocWithP, evolveP, tapP } = require('@articulate/funky')
+const { assoc } = require('tinyfunk')
+const { assocWithP, evolveP, tapP } = require('@articulate/funky')
 const bcrypt = require('bcrypt')
 const Joi = require('@hapi/joi')
 
@@ -7,20 +7,13 @@ const { accepted, error } = require('../../lib/responses')
 const mongodb = require('../../lib/mongodb')
 const trace = require('../../lib/trace')
 const ValidationError = require('../../lib/ValidationError')
-const { writeMessage } = require('../../lib/messages')
+const writeSignup = require('../../components/UserSignup/commands/writeSignup')
 
 const schema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(8).required(),
   userId: Joi.string().required()
 }).required()
-
-const buildCommand =
-  assemble({
-    type: 'Signup',
-    metadata: pick(['traceId', 'userId']),
-    data: pick(['email', 'password', 'userId'])
-  })
 
 const ensureNotExisting = tapP(({ existing }) =>
   existing && Promise.reject(new ValidationError({ email: ['already taken'] }))
@@ -38,8 +31,7 @@ const signup = async (req, res) =>
     .then(assocWithP('existing', existingIdentity))
     .then(ensureNotExisting)
     .then(evolveP({ password: hashPassword }))
-    .then(buildCommand)
-    .then(writeMessage(`userSignup:command-${req.body.userId}`))
+    .then(writeSignup)
     .then(accepted(res))
     .catch(error(res))
 

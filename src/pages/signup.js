@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { compose, either, path, prop } from 'tinyfunk'
+import { compose, either, path } from 'tinyfunk'
 import p from 'react-puddles'
 import tinygen from 'tinygen'
 import { useCallback, useState } from 'react'

@@ -2,22 +2,23 @@ const trace = require('../../lib/trace')
 
 const { writeMessage } = require('../../lib/messages')
 
+const writeViewed = ({ traceId, userId, videoId }) =>
+  writeMessage(`viewing-${videoId}`, {
+    type: 'Viewed',
+    data: {
+      videoId,
+      viewedAt: new Date().toJSON()
+    },
+    metadata: { traceId, userId }
+  })
+
 const recordView = async (req, res) => {
   const {
     body: { videoId },
     meta: { traceId, userId }
   } = req
 
-  const msg = {
-    type: 'VideoViewed',
-    metadata: { traceId, userId },
-    data: {
-      videoId,
-      viewedAt: new Date().toJSON()
-    }
-  }
-
-  await writeMessage(`viewing-${videoId}`, msg)
+  await writeViewed({ traceId, userId, videoId })
 
   res.status(202)
   res.end()

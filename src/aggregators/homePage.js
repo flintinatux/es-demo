@@ -28,6 +28,6 @@ module.exports =
     category: 'viewing',
     init: ensureHomePage,
     handlers: {
-      VideoViewed: incrementVideosWatched
+      Viewed: incrementVideosWatched
     }
   })

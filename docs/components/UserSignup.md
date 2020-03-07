@@ -1,18 +1,18 @@
-# Identity
+# UserSignup
 
-> Handles everything related to identifying users.
+> Handles the process of users signing themselves up.
 
 ## Commands
 
-Stream name: `identity:command-${userId}`
+Stream name: `userSignup:command-${userId}`
 
-### Register
+### Signup
 
-Registers a user for our application.
+Signs up a user for our application.
 
 ```json
 {
-  "type": "Register",
+  "type": "Signup",
   "metadata": {
     "userId": "dl16jZ5ZvrD5vRdn"
   },
@@ -26,32 +26,15 @@ Registers a user for our application.
 
 ## Events
 
-Stream name: `identity-${userId}`
+Stream name: `userSignup-${userId}`
 
-### AccountLocked
+### SignedUp
 
-Denotes that a user's account has been locked.
-
-```json
-{
-  "type": "AccountLocked",
-  "metadata": {
-    "userId": "dl16jZ5ZvrD5vRdn"
-  },
-  "data": {
-    "lockedTime": "2020-02-28T05:34:33.880Z",
-    "userId": "dl16jZ5ZvrD5vRdn"
-  }
-}
-```
-
-### Registered
-
-Denotes that a user has successfully registered.
+Denotes that a user has successfully signed up.
 
 ```json
 {
-  "type": "Registered",
+  "type": "SignedUp",
   "metadata": {
     "userId": "dl16jZ5ZvrD5vRdn"
   },
@@ -63,13 +46,13 @@ Denotes that a user has successfully registered.
 }
 ```
 
-### RegistrationFailed
+### SignupFailed
 
-Denotes that a user has failed to register.
+Denotes that a user has failed to signup.
 
 ```json
 {
-  "type": "RegistrationFailed",
+  "type": "SignupFailed",
   "metadata": {
     "userId": "dl16jZ5ZvrD5vRdn"
   },

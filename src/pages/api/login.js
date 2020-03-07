@@ -47,10 +47,10 @@ const trackFailure = async err => {
   const { traceId, userCred: { userId }={} } = err.data || {}
 
   if (userId) {
-    await writeMessage(`authentication-${userId}`, {
-      type: 'UserLoginFailed',
-      metadata: { traceId, userId },
-      data: { reason: 'Incorrect password', userId }
+    await writeMessage(`userLogin-${userId}`, {
+      type: 'LoginFailed',
+      data: { reason: 'Incorrect password', userId },
+      metadata: { traceId, userId }
     })
   }
 
@@ -58,10 +58,10 @@ const trackFailure = async err => {
 }
 
 const trackLogin = tapP(({ traceId, userCred: { userId } }) =>
-  writeMessage(`authentication-${userId}`, {
-    type: 'UserLoggedIn',
-    metadata: { traceId, userId },
-    data: { userId }
+  writeMessage(`userLogin-${userId}`, {
+    type: 'LoggedIn',
+    data: { userId },
+    metadata: { traceId, userId }
   })
 )
 
