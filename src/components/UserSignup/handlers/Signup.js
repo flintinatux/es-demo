@@ -8,7 +8,8 @@ const Signup = async ({ data, metadata }) => {
   const [ userSignup, version ] = await UserSignup.fetch(data.userId)
 
   if (!userSignup.registered) {
-    writeMessage(`userSignup-${data.userId}`, {
+    writeMessage({
+      streamName: `userSignup-${data.userId}`,
       type: 'SignedUp',
       metadata: pick(['traceId', 'userId'], metadata),
       data: pick(['email', 'password', 'userId'], data),

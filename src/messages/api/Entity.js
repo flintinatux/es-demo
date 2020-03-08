@@ -102,7 +102,7 @@ const Entity = db => opts => {
 
     if (_cache) {
       _cache.set(id, record)
-      debug('cache: %o', { id, version: record.version })
+      debug('cached: %o', { id, version: record.version })
     }
 
     return [ record.entity, record.version ]
@@ -123,7 +123,8 @@ const Entity = db => opts => {
   }
 
   const putSnapshot = (id, record) =>
-    db.writeMessage(`${name}:snapshot-${id}`, {
+    db.writeMessage({
+      streamName: `${name}:snapshot-${id}`,
       type: 'Recorded',
       data: cleanSnapshot(record)
     })

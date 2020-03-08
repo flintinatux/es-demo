@@ -53,8 +53,8 @@ const Consumer = db => opts => {
     stream.observe().each(logMessage)
 
     stream.flatMap(handleMessage)
-      .stopOnError(stop)
       .flatMap(updatePosition)
+      .stopOnError(stop)
       .done(tick)
   }
 
@@ -98,7 +98,8 @@ const Consumer = db => opts => {
   }
 
   const writePosition = () =>
-    _(db.writeMessage(streamName, {
+    _(db.writeMessage({
+      streamName,
       type: 'Recorded',
       data: { position }
     }))

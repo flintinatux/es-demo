@@ -3,7 +3,8 @@ const trace = require('../../lib/trace')
 const { writeMessage } = require('../../lib/messages')
 
 const writeViewed = ({ traceId, userId, videoId }) =>
-  writeMessage(`viewing-${videoId}`, {
+  writeMessage({
+    streamName: `viewing-${videoId}`,
     type: 'Viewed',
     data: {
       videoId,

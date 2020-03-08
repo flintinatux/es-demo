@@ -47,7 +47,8 @@ const trackFailure = async err => {
   const { traceId, userCred: { userId }={} } = err.data || {}
 
   if (userId) {
-    await writeMessage(`userLogin-${userId}`, {
+    await writeMessage({
+      streamName: `userLogin-${userId}`,
       type: 'LoginFailed',
       data: { reason: 'Incorrect password', userId },
       metadata: { traceId, userId }
@@ -58,7 +59,8 @@ const trackFailure = async err => {
 }
 
 const trackLogin = tapP(({ traceId, userCred: { userId } }) =>
-  writeMessage(`userLogin-${userId}`, {
+  writeMessage({
+    streamName: `userLogin-${userId}`,
     type: 'LoggedIn',
     data: { userId },
     metadata: { traceId, userId }
