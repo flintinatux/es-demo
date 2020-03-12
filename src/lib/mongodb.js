@@ -8,7 +8,7 @@ const client = new MongoClient(process.env.MONGO_URI, {
 
 const db =
   client.connect().then(c =>
-    c.db('es')
+    c.db('es-demo')
   )
 
 const collection = memoize(async name =>
